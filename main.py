@@ -69,13 +69,13 @@ def set_keygen() -> None:
 
 def set_config() -> None:
     pubkey_authentication = permit_root_login = password_authentication = ''
-    if window.checkBox.checked:
-        pubkey_authentication = 'yes' if window.radioButton_3.checked else 'no'
-    if window.checkBox_4.checked:
-        permit_root_login = 'yes' if window.radioButton_2.checked else 'no'
-    if window.checkBox_2.checked:
-        password_authentication = 'yes' if window.radioButton_5.checked else ''
-    authorized_keys_file_path = True if window.checkBox_3.checked else False
+    if window.checkBox.isChecked():
+        pubkey_authentication = 'yes' if window.radioButton_3.isChecked() else 'no'
+    if window.checkBox_4.isChecked():
+        permit_root_login = 'yes' if window.radioButton_2.isChecked() else 'no'
+    if window.checkBox_2.isChecked():
+        password_authentication = 'yes' if window.radioButton_5.isChecked() else 'no'
+    authorized_keys_file_path = True if window.checkBox_3.isChecked() else False
     path = window.lineEdit_11.displayText()
     config.set_config_change(server=window.lineEdit_7.displayText(),
                              pubkey_authentication=pubkey_authentication,

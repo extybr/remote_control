@@ -1,5 +1,5 @@
+import os
 from subprocess import run
-from os import getenv, mkdir
 from shutil import copy, move
 from dotenv import load_dotenv
 
@@ -8,12 +8,12 @@ load_dotenv()
 
 class Host:
     def __init__(self, number: int) -> None:
-        self.length = getenv('SERVER').split(',')
-        self.host = getenv('HOST').split(',')[number - 1]
-        self.port = int(getenv('PORT').split(',')[number - 1])
-        self.user = getenv('USER').split(',')[number - 1]
-        self.server = getenv('SERVER').split(',')[number - 1]
-        self.password = getenv('PASSWORD').split(',')[number - 1]
+        self.length = os.getenv('SERVER').split(',')
+        self.host = os.getenv('HOST').split(',')[number - 1]
+        self.port = int(os.getenv('PORT').split(',')[number - 1])
+        self.user = os.getenv('USERS').split(',')[number - 1]
+        self.server = os.getenv('SERVER').split(',')[number - 1]
+        self.password = os.getenv('PASSWORD').split(',')[number - 1]
         self.private_file = f'private/{self.server}'
 
     @staticmethod
@@ -56,7 +56,7 @@ class ConfigHost:
         if not authorized_keys_file_path:
             del change["#AuthorizedKeysFile"]
         elif authorized_keys_file_path:
-            if path != '.ssh/{server}.pub':
+            if path != '.ssh/{server}.pub' and path.strip() != '':
                 change["#AuthorizedKeysFile"] = f"AuthorizedKeysFile {path}\n"
         if pubkey_authentication:
             if pubkey_authentication == 'no':
@@ -104,16 +104,24 @@ class ConfigHost:
                         user: str,
                         server: str) -> None:
         # home_ssh = f'/home/{user}/.ssh'
-        from_path = from_ssh if from_ssh else self.etc_ssh + server
-        if to_ssh.startswith('/home/'):
-            mkdir(to_ssh)
-            move(from_path, to_ssh)
-            move(from_path + '.pub', to_ssh)
-            cmd = [f"cd {to_ssh}",
-                   f"chmod 600 {server}*",
-                   f"chown {user}:{user} {server}*",
-                   f"systemctl reload sshd"]
-            [run(i, shell=True) for i in cmd]
+        if not from_ssh.endswith('/'):
+            from_ssh = from_ssh + '/'
+        exists_from_ssh = os.path.exists(from_ssh + server)
+        exists_etc_ssh = os.path.exists(self.etc_ssh + server)
+        from_path = from_ssh + server if exists_from_ssh else server
+        if exists_etc_ssh and not from_path:
+            from_path = self.etc_ssh + server
+        if to_ssh.startswith('/home/') and (exists_from_ssh or exists_etc_ssh):
+            if not os.path.exists(to_ssh):
+                os.mkdir(to_ssh)
+            if os.path.exists(from_path) and os.path.exists(to_ssh):
+                move(from_path, to_ssh)
+                move(from_path + '.pub', to_ssh)
+                cmd = [f"cd {to_ssh}",
+                       f"chmod 600 {server}*",
+                       f"chown {user}:{user} {server}*",
+                       f"systemctl reload sshd"]
+                [run(i, shell=True) for i in cmd]
 
     @staticmethod
     def service_config_reload() -> None:
