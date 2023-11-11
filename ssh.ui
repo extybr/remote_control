@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>ssh</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(212, 212, 212);</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
@@ -21,6 +24,9 @@
        <font>
         <pointsize>10</pointsize>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
       </property>
       <property name="currentIndex">
        <number>0</number>
@@ -42,6 +48,9 @@
                <bold>true</bold>
               </font>
              </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(166, 255, 139);</string>
+             </property>
              <property name="text">
               <string>connect</string>
              </property>
@@ -54,6 +63,9 @@
                <pointsize>12</pointsize>
               </font>
              </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
+             </property>
             </widget>
            </item>
            <item row="2" column="5">
@@ -62,6 +74,9 @@
               <font>
                <pointsize>12</pointsize>
               </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
              </property>
             </widget>
            </item>
@@ -106,6 +121,9 @@
                <pointsize>12</pointsize>
               </font>
              </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
+             </property>
             </widget>
            </item>
            <item row="1" column="4">
@@ -149,6 +167,9 @@
                <pointsize>12</pointsize>
               </font>
              </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
+             </property>
             </widget>
            </item>
            <item row="1" column="0">
@@ -177,6 +198,9 @@
                <bold>false</bold>
               </font>
              </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
+             </property>
             </widget>
            </item>
            <item row="2" column="2">
@@ -185,6 +209,9 @@
               <font>
                <pointsize>12</pointsize>
               </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
              </property>
              <property name="text">
               <string/>
@@ -199,6 +226,9 @@
                <weight>75</weight>
                <bold>true</bold>
               </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(166, 255, 139);</string>
              </property>
              <property name="text">
               <string>execute</string>
@@ -229,6 +259,9 @@
                <pointsize>14</pointsize>
               </font>
              </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
+             </property>
             </widget>
            </item>
            <item row="3" column="3" colspan="2">
@@ -256,6 +289,9 @@
                <bold>true</bold>
               </font>
              </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
+             </property>
              <item>
               <property name="text">
                <string/>
@@ -271,6 +307,9 @@
                <weight>75</weight>
                <bold>true</bold>
               </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(166, 255, 139);</string>
              </property>
              <property name="text">
               <string>select</string>
@@ -289,6 +328,9 @@
               <font>
                <pointsize>12</pointsize>
               </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
              </property>
             </widget>
            </item>
@@ -314,6 +356,9 @@
                <bold>true</bold>
               </font>
              </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -327,6 +372,9 @@
                <weight>75</weight>
                <bold>true</bold>
               </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
              </property>
              <property name="text">
               <string/>
@@ -342,6 +390,9 @@
                <bold>true</bold>
               </font>
              </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -356,6 +407,9 @@
                <bold>true</bold>
               </font>
              </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -369,6 +423,9 @@
                <weight>75</weight>
                <bold>true</bold>
               </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
              </property>
              <property name="text">
               <string/>
@@ -397,6 +454,9 @@
                <weight>75</weight>
                <bold>true</bold>
               </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(166, 255, 139);</string>
              </property>
              <property name="text">
               <string>execute</string>
@@ -476,9 +536,13 @@
             <widget class="QPushButton" name="pushButton_10">
              <property name="font">
               <font>
+               <pointsize>10</pointsize>
                <weight>75</weight>
                <bold>true</bold>
               </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(166, 255, 139);</string>
              </property>
              <property name="text">
               <string>generate</string>
@@ -499,6 +563,9 @@
                <weight>75</weight>
                <bold>true</bold>
               </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(166, 255, 139);</string>
              </property>
              <property name="text">
               <string>move</string>
@@ -541,6 +608,9 @@
                <bold>true</bold>
               </font>
              </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(166, 255, 139);</string>
+             </property>
              <property name="text">
               <string>service ssh reload</string>
              </property>
@@ -555,6 +625,9 @@
                <bold>true</bold>
               </font>
              </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(166, 255, 139);</string>
+             </property>
              <property name="text">
               <string>change sshd file</string>
              </property>
@@ -568,6 +641,9 @@
                <weight>75</weight>
                <bold>true</bold>
               </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(166, 255, 139);</string>
              </property>
              <property name="text">
               <string>restore</string>
@@ -722,6 +798,9 @@
                   <bold>true</bold>
                  </font>
                 </property>
+                <property name="styleSheet">
+                 <string notr="true">background-color: rgb(213, 252, 255);</string>
+                </property>
                 <property name="text">
                  <string>.ssh/{server}.pub</string>
                 </property>
@@ -739,6 +818,9 @@
                <bold>true</bold>
               </font>
              </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
+             </property>
              <property name="text">
               <string>/etc/ssh/{server}*</string>
              </property>
@@ -752,6 +834,9 @@
                <weight>75</weight>
                <bold>true</bold>
               </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
              </property>
              <property name="text">
               <string>/home/{user}/.ssh/</string>
@@ -780,6 +865,9 @@
                <weight>75</weight>
                <bold>true</bold>
               </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(166, 255, 139);</string>
              </property>
              <property name="text">
               <string>backup</string>

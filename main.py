@@ -46,7 +46,7 @@ def execute() -> None:
     command_execute(command=command)
 
 
-def get_var() -> tuple:
+def get_variables() -> tuple:
     server_name = window.lineEdit_7.displayText()
     port = window.lineEdit_8.displayText()
     user = window.lineEdit_9.displayText()
@@ -55,11 +55,11 @@ def get_var() -> tuple:
 
 
 def generate_text_keygen() -> str:
-    server_name = get_var()[0]
-    line = (f"ssh-keygen -t rsa -b 2048 -C '{server_name.upper()}' -f "
+    server_name = get_variables()[0]
+    text = (f"ssh-keygen -t rsa -b 2048 -C '{server_name.upper()}' -f "
             f"{server_name}")
-    window.lineEdit_12.setText(line)
-    return line
+    window.lineEdit_12.setText(text)
+    return text
 
 
 def set_keygen() -> None:
@@ -68,14 +68,32 @@ def set_keygen() -> None:
 
 
 def set_config() -> None:
-    config.set_config_change(window.lineEdit_7.displayText())
+    pubkey_authentication = permit_root_login = password_authentication = ''
+    if window.checkBox.checked:
+        pubkey_authentication = 'yes' if window.radioButton_3.checked else 'no'
+    if window.checkBox_4.checked:
+        permit_root_login = 'yes' if window.radioButton_2.checked else 'no'
+    if window.checkBox_2.checked:
+        password_authentication = 'yes' if window.radioButton_5.checked else ''
+    authorized_keys_file_path = True if window.checkBox_3.checked else False
+    path = window.lineEdit_11.displayText()
+    config.set_config_change(server=window.lineEdit_7.displayText(),
+                             pubkey_authentication=pubkey_authentication,
+                             permit_root_login=permit_root_login,
+                             password_authentication=password_authentication,
+                             authorized_keys_file_path=authorized_keys_file_path,
+                             path=path)
 
 
 def move_and_change() -> None:
-    home_ssh = window.lineEdit_14.displayText()
+    from_ssh = window.lineEdit_13.displayText()
+    to_ssh = window.lineEdit_14.displayText()
     server_name = window.lineEdit_7.displayText()
     user = window.lineEdit_9.displayText()
-    config.move_and_change(home_ssh=home_ssh, server=server_name, user=user)
+    config.move_and_change(from_ssh=from_ssh,
+                           to_ssh=to_ssh,
+                           user=user,
+                           server=server_name)
 
 
 def connect() -> None:
@@ -93,12 +111,15 @@ if __name__ == "__main__":
     window.pushButton_8.clicked.connect(set_server_config)  # select
     window.pushButton_7.clicked.connect(connect)
     window.pushButton.clicked.connect(execute)  # execute command
+    variable = get_variables()
+    config = ConfigHost(server=variable[0], port=variable[1],
+                        user=variable[2], password=variable[3])
     window.pushButton_10.clicked.connect(generate_text_keygen)  # generate
-    config = ConfigHost(server=get_var()[0], port=get_var()[1],
-                        user=get_var()[2], password=get_var()[3])
     window.pushButton_2.clicked.connect(set_keygen)  # execute keygen
     window.pushButton_9.clicked.connect(config.save_backup)  # backup
     window.pushButton_3.clicked.connect(set_config)  # change sshd file
     window.pushButton_5.clicked.connect(move_and_change)  # move
+    window.pushButton_4.clicked.connect(config.restore_config)  # restore
+    window.pushButton_6.clicked.connect(config.service_config_reload)  # config reload
     window.show()
     app.exec_()
