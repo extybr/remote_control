@@ -68,6 +68,18 @@
              </property>
             </widget>
            </item>
+           <item row="2" column="0">
+            <widget class="QLineEdit" name="lineEdit">
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
+             </property>
+            </widget>
+           </item>
            <item row="2" column="5">
             <widget class="QLineEdit" name="lineEdit_5">
              <property name="font">
@@ -114,15 +126,20 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
-            <widget class="QLineEdit" name="lineEdit">
+           <item row="1" column="3">
+            <widget class="QLabel" name="label_3">
              <property name="font">
               <font>
                <pointsize>12</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
               </font>
              </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: rgb(213, 252, 255);</string>
+             <property name="text">
+              <string>user</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
@@ -143,23 +160,6 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="3">
-            <widget class="QLabel" name="label_3">
-             <property name="font">
-              <font>
-               <pointsize>12</pointsize>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>user</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
            <item row="2" column="3">
             <widget class="QLineEdit" name="lineEdit_3">
              <property name="font">
@@ -169,6 +169,21 @@
              </property>
              <property name="styleSheet">
               <string notr="true">background-color: rgb(213, 252, 255);</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QLineEdit" name="lineEdit_2">
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
+             </property>
+             <property name="text">
+              <string/>
              </property>
             </widget>
            </item>
@@ -203,49 +218,17 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="2">
-            <widget class="QLineEdit" name="lineEdit_2">
+           <item row="3" column="3" colspan="2">
+            <widget class="QLabel" name="label_6">
              <property name="font">
               <font>
-               <pointsize>12</pointsize>
-              </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: rgb(213, 252, 255);</string>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="6">
-            <widget class="QPushButton" name="pushButton">
-             <property name="font">
-              <font>
-               <pointsize>12</pointsize>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: rgb(166, 255, 139);</string>
-             </property>
-             <property name="text">
-              <string>execute</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="6">
-            <widget class="QLabel" name="label_15">
-             <property name="font">
-              <font>
-               <pointsize>12</pointsize>
+               <pointsize>14</pointsize>
                <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
              <property name="text">
-              <string>private file</string>
+              <string>command</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -264,17 +247,17 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="3" colspan="2">
-            <widget class="QLabel" name="label_6">
+           <item row="1" column="6">
+            <widget class="QLabel" name="label_15">
              <property name="font">
               <font>
-               <pointsize>14</pointsize>
+               <pointsize>12</pointsize>
                <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
              <property name="text">
-              <string>command</string>
+              <string>private file</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -299,7 +282,14 @@
              </item>
             </widget>
            </item>
-           <item row="3" column="6">
+           <item row="2" column="7">
+            <widget class="QToolButton" name="toolButton_3">
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="6" colspan="2">
             <widget class="QPushButton" name="pushButton_8">
              <property name="font">
               <font>
@@ -313,6 +303,23 @@
              </property>
              <property name="text">
               <string>select</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="6" colspan="2">
+            <widget class="QPushButton" name="pushButton">
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(166, 255, 139);</string>
+             </property>
+             <property name="text">
+              <string>execute</string>
              </property>
             </widget>
            </item>
@@ -572,20 +579,6 @@
              </property>
             </widget>
            </item>
-           <item row="9" column="0">
-            <widget class="QLabel" name="label_13">
-             <property name="font">
-              <font>
-               <pointsize>12</pointsize>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>from</string>
-             </property>
-            </widget>
-           </item>
            <item row="11" column="1" colspan="6">
             <spacer name="horizontalSpacer">
              <property name="orientation">
@@ -598,6 +591,23 @@
               </size>
              </property>
             </spacer>
+           </item>
+           <item row="2" column="6">
+            <widget class="QPushButton" name="pushButton_3">
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(166, 255, 139);</string>
+             </property>
+             <property name="text">
+              <string>change sshd file</string>
+             </property>
+            </widget>
            </item>
            <item row="11" column="0">
             <widget class="QPushButton" name="pushButton_6">
@@ -616,8 +626,8 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="6">
-            <widget class="QPushButton" name="pushButton_3">
+           <item row="9" column="0">
+            <widget class="QLabel" name="label_13">
              <property name="font">
               <font>
                <pointsize>12</pointsize>
@@ -625,11 +635,8 @@
                <bold>true</bold>
               </font>
              </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: rgb(166, 255, 139);</string>
-             </property>
              <property name="text">
-              <string>change sshd file</string>
+              <string>from</string>
              </property>
             </widget>
            </item>
@@ -650,43 +657,38 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="0" colspan="6">
-            <widget class="QFrame" name="frame_2">
-             <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+           <item row="10" column="0" colspan="2">
+            <widget class="QLineEdit" name="lineEdit_13">
+             <property name="font">
+              <font>
+               <pointsize>10</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
              </property>
-             <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
              </property>
-             <layout class="QGridLayout" name="gridLayout_8">
-              <item row="0" column="0">
-               <widget class="QCheckBox" name="checkBox">
-                <property name="text">
-                 <string>PubkeyAuthentication</string>
-                </property>
-                <property name="checked">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="2">
-               <widget class="QRadioButton" name="radioButton_4">
-                <property name="text">
-                 <string>PubkeyAuthentication no</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QRadioButton" name="radioButton_3">
-                <property name="text">
-                 <string>PubkeyAuthentication yes</string>
-                </property>
-                <property name="checked">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <property name="text">
+              <string>/etc/ssh/{server}*</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="6">
+            <widget class="QPushButton" name="pushButton_9">
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(166, 255, 139);</string>
+             </property>
+             <property name="text">
+              <string>backup</string>
+             </property>
             </widget>
            </item>
            <item row="2" column="0" colspan="6">
@@ -725,6 +727,45 @@
                 </property>
                 <property name="checked">
                  <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0" colspan="6">
+            <widget class="QFrame" name="frame_2">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_8">
+              <item row="0" column="0">
+               <widget class="QCheckBox" name="checkBox">
+                <property name="text">
+                 <string>PubkeyAuthentication</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QRadioButton" name="radioButton_4">
+                <property name="text">
+                 <string>PubkeyAuthentication no</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QRadioButton" name="radioButton_3">
+                <property name="text">
+                 <string>PubkeyAuthentication yes</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -809,41 +850,30 @@
              </layout>
             </widget>
            </item>
-           <item row="10" column="0" colspan="2">
-            <widget class="QLineEdit" name="lineEdit_13">
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
+           <item row="10" column="2">
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
              </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: rgb(213, 252, 255);</string>
+             <property name="sizeType">
+              <enum>QSizePolicy::Minimum</enum>
              </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="9" column="1">
+            <widget class="QToolButton" name="toolButton">
              <property name="text">
-              <string>/etc/ssh/{server}*</string>
+              <string>...</string>
              </property>
             </widget>
            </item>
-           <item row="10" column="2" colspan="4">
-            <widget class="QLineEdit" name="lineEdit_14">
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: rgb(213, 252, 255);</string>
-             </property>
-             <property name="text">
-              <string>/home/{user}/.ssh/</string>
-             </property>
-            </widget>
-           </item>
-           <item row="9" column="2" colspan="2">
+           <item row="9" column="3" colspan="2">
             <widget class="QLabel" name="label_14">
              <property name="font">
               <font>
@@ -857,20 +887,27 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="6">
-            <widget class="QPushButton" name="pushButton_9">
+           <item row="9" column="5">
+            <widget class="QToolButton" name="toolButton_2">
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="3" colspan="3">
+            <widget class="QLineEdit" name="lineEdit_14">
              <property name="font">
               <font>
-               <pointsize>12</pointsize>
+               <pointsize>10</pointsize>
                <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
              <property name="styleSheet">
-              <string notr="true">background-color: rgb(166, 255, 139);</string>
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
              </property>
              <property name="text">
-              <string>backup</string>
+              <string>/home/{user}/.ssh/</string>
              </property>
             </widget>
            </item>

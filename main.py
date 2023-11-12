@@ -1,6 +1,7 @@
 import paramiko
 from pathlib import Path
 from PyQt5 import QtWidgets, uic
+from PyQt5.QtGui import QIcon
 from configuration_host import Host, ConfigHost
 
 
@@ -26,7 +27,7 @@ def command_execute(command: str) -> None:
     host = Host(window.comboBox.currentIndex())
     for number in range(1, len(host.length) + 1):
         if window.comboBox.currentIndex() == number:
-            path_file = Path(host.private_file).absolute()
+            path_file = Path(window.lineEdit_15.displayText()).absolute()
             client = paramiko.SSHClient()
             client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             key = paramiko.RSAKey.from_private_key_file(filename=str(path_file),
@@ -104,6 +105,24 @@ def connect() -> None:
     Host.connect(server_name=server_name, user=user, host=host, port=port)
 
 
+def select_from_path():
+    file_path = QtWidgets.QFileDialog.getOpenFileName(
+        window, 'Open file', '/home/')[0]
+    window.lineEdit_13.setText(file_path)
+
+
+def select_to_path():
+    path = QtWidgets.QFileDialog.getExistingDirectory(
+        window, 'Open folder', '/home/')
+    window.lineEdit_14.setText(path)
+
+
+def select_private_file_path():
+    file_path = QtWidgets.QFileDialog.getOpenFileName(
+        window, 'Open file', '/home/')[0]
+    window.lineEdit_15.setText(file_path)
+
+
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
     window = uic.loadUi("ssh.ui")
@@ -114,6 +133,9 @@ if __name__ == "__main__":
     variable = get_variables()
     config = ConfigHost(server=variable[0], port=variable[1],
                         user=variable[2], password=variable[3])
+    window.toolButton.clicked.connect(select_from_path)
+    window.toolButton_2.clicked.connect(select_to_path)
+    window.toolButton_3.clicked.connect(select_private_file_path)
     window.pushButton_10.clicked.connect(generate_text_keygen)  # generate
     window.pushButton_2.clicked.connect(set_keygen)  # execute keygen
     window.pushButton_9.clicked.connect(config.save_backup)  # backup
@@ -121,5 +143,6 @@ if __name__ == "__main__":
     window.pushButton_5.clicked.connect(move_and_change)  # move
     window.pushButton_4.clicked.connect(config.restore_config)  # restore
     window.pushButton_6.clicked.connect(config.service_config_reload)  # config reload
+    app.setWindowIcon(QIcon('images/favicon.ico'))
     window.show()
     app.exec_()
