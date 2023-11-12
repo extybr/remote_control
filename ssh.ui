@@ -39,23 +39,6 @@
         <item>
          <widget class="QWidget" name="widget" native="true">
           <layout class="QGridLayout" name="gridLayout_3">
-           <item row="4" column="0">
-            <widget class="QPushButton" name="pushButton_7">
-             <property name="font">
-              <font>
-               <pointsize>12</pointsize>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: rgb(166, 255, 139);</string>
-             </property>
-             <property name="text">
-              <string>connect</string>
-             </property>
-            </widget>
-           </item>
            <item row="2" column="4">
             <widget class="QLineEdit" name="lineEdit_4">
              <property name="font">
@@ -80,15 +63,20 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="5">
-            <widget class="QLineEdit" name="lineEdit_5">
+           <item row="4" column="0">
+            <widget class="QPushButton" name="pushButton_7">
              <property name="font">
               <font>
                <pointsize>12</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
               </font>
              </property>
              <property name="styleSheet">
-              <string notr="true">background-color: rgb(213, 252, 255);</string>
+              <string notr="true">background-color: rgb(166, 255, 139);</string>
+             </property>
+             <property name="text">
+              <string>connect</string>
              </property>
             </widget>
            </item>
@@ -106,6 +94,18 @@
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="5">
+            <widget class="QLineEdit" name="lineEdit_5">
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
              </property>
             </widget>
            </item>
@@ -143,6 +143,21 @@
              </property>
             </widget>
            </item>
+           <item row="2" column="2">
+            <widget class="QLineEdit" name="lineEdit_2">
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
            <item row="1" column="4">
             <widget class="QLabel" name="label_4">
              <property name="font">
@@ -172,35 +187,15 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="2">
-            <widget class="QLineEdit" name="lineEdit_2">
+           <item row="4" column="2" colspan="4">
+            <widget class="QLineEdit" name="lineEdit_6">
              <property name="font">
               <font>
-               <pointsize>12</pointsize>
+               <pointsize>14</pointsize>
               </font>
              </property>
              <property name="styleSheet">
               <string notr="true">background-color: rgb(213, 252, 255);</string>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label">
-             <property name="font">
-              <font>
-               <pointsize>12</pointsize>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>host</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
@@ -235,15 +230,20 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="2" colspan="4">
-            <widget class="QLineEdit" name="lineEdit_6">
+           <item row="1" column="0">
+            <widget class="QLabel" name="label">
              <property name="font">
               <font>
-               <pointsize>14</pointsize>
+               <pointsize>12</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
               </font>
              </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: rgb(213, 252, 255);</string>
+             <property name="text">
+              <string>host</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
@@ -264,45 +264,10 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="5">
-            <widget class="QComboBox" name="comboBox">
-             <property name="font">
-              <font>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: rgb(213, 252, 255);</string>
-             </property>
-             <item>
-              <property name="text">
-               <string/>
-              </property>
-             </item>
-            </widget>
-           </item>
            <item row="2" column="7">
             <widget class="QToolButton" name="toolButton_3">
              <property name="text">
               <string>...</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="6" colspan="2">
-            <widget class="QPushButton" name="pushButton_8">
-             <property name="font">
-              <font>
-               <pointsize>12</pointsize>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: rgb(166, 255, 139);</string>
-             </property>
-             <property name="text">
-              <string>select</string>
              </property>
             </widget>
            </item>
@@ -321,6 +286,51 @@
              <property name="text">
               <string>execute</string>
              </property>
+            </widget>
+           </item>
+           <item row="2" column="8">
+            <widget class="QPushButton" name="pushButton_8">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+               <kerning>true</kerning>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(166, 255, 139);</string>
+             </property>
+             <property name="text">
+              <string>select</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="6" colspan="2">
+            <widget class="QComboBox" name="comboBox">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(213, 252, 255);</string>
+             </property>
+             <item>
+              <property name="text">
+               <string/>
+              </property>
+             </item>
             </widget>
            </item>
           </layout>
@@ -932,8 +942,6 @@
   <tabstop>tabWidget</tabstop>
   <tabstop>pushButton</tabstop>
   <tabstop>lineEdit_6</tabstop>
-  <tabstop>comboBox</tabstop>
-  <tabstop>pushButton_8</tabstop>
   <tabstop>textBrowser</tabstop>
   <tabstop>lineEdit_10</tabstop>
   <tabstop>lineEdit_9</tabstop>
@@ -961,5 +969,22 @@
   <tabstop>pushButton_9</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>comboBox</sender>
+   <signal>activated(QString)</signal>
+   <receiver>pushButton_8</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>562</x>
+     <y>120</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>699</x>
+     <y>121</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

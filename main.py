@@ -21,30 +21,43 @@ def set_server_config() -> None:
             window.lineEdit_15.setText(host.private_file)  # private file
 
 
-def command_execute(command: str) -> None:
-    command = command if command else 'netstat -ntuop'
-    window.textBrowser.clear()
+def connect_to_server() -> any:
     host = Host(window.comboBox.currentIndex())
     for number in range(1, len(host.length) + 1):
         if window.comboBox.currentIndex() == number:
             path_file = Path(window.lineEdit_15.displayText()).absolute()
             client = paramiko.SSHClient()
             client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            key = paramiko.RSAKey.from_private_key_file(filename=str(path_file),
-                                                        password=host.password)
+            key = paramiko.RSAKey.from_private_key_file(
+                filename=str(path_file),
+                password=host.password)
             client.connect(hostname=host.host, port=host.port,
-                           username=host.user, pkey=key)
-            stdin, stdout, stderr = client.exec_command(command)
-            output = stdout.readlines()
-            window.textBrowser.clear()
-            for line in output:
-                window.textBrowser.append(line.strip())
-            client.close()
+                           username=host.user, pkey=key, timeout=5)
+            return client
+
+
+def command_execute(command: str) -> None:
+    command = command if command else 'netstat -ntuop'
+    window.textBrowser.clear()
+    server = Host(window.comboBox.currentIndex()).host
+    try:
+        client = connect_to_server()
+        stdin, stdout, stderr = client.exec_command(command)
+        output = stdout.readlines()
+        window.textBrowser.clear()
+        for line in output:
+            window.textBrowser.append(line.strip())
+    except TimeoutError as e:
+        window.textBrowser.append(f'unable to connect to server: <h1>{server}'
+                                  f'</h1> (<font color="red">{e})</font>')
 
 
 def execute() -> None:
     command = window.lineEdit_6.displayText()
-    command_execute(command=command)
+    try:
+        command_execute(command=command)
+    except Exception as e:
+        print(e)
 
 
 def get_variables() -> tuple:
@@ -105,34 +118,30 @@ def connect() -> None:
     Host.connect(server_name=server_name, user=user, host=host, port=port)
 
 
-def select_from_path():
+def select_from_path() -> None:
     file_path = QtWidgets.QFileDialog.getOpenFileName(
-        window, 'Open file', '/home/')[0]
+        window, 'Select a private file', '/home/')[0]
     window.lineEdit_13.setText(file_path)
 
 
-def select_to_path():
+def select_to_path() -> None:
     path = QtWidgets.QFileDialog.getExistingDirectory(
-        window, 'Open folder', '/home/')
+        window, 'Select the destination folder', '/home/')
     window.lineEdit_14.setText(path)
 
 
-def select_private_file_path():
+def select_private_file_path() -> None:
     file_path = QtWidgets.QFileDialog.getOpenFileName(
-        window, 'Open file', '/home/')[0]
+        window, 'Select a private file', '/home/')[0]
     window.lineEdit_15.setText(file_path)
 
 
-if __name__ == "__main__":
-    app = QtWidgets.QApplication([])
-    window = uic.loadUi("ssh.ui")
+def functional():
+    global window, config, app
     window.comboBox.addItems(Host(1).length)
     window.pushButton_8.clicked.connect(set_server_config)  # select
     window.pushButton_7.clicked.connect(connect)
     window.pushButton.clicked.connect(execute)  # execute command
-    variable = get_variables()
-    config = ConfigHost(server=variable[0], port=variable[1],
-                        user=variable[2], password=variable[3])
     window.toolButton.clicked.connect(select_from_path)
     window.toolButton_2.clicked.connect(select_to_path)
     window.toolButton_3.clicked.connect(select_private_file_path)
@@ -143,6 +152,18 @@ if __name__ == "__main__":
     window.pushButton_5.clicked.connect(move_and_change)  # move
     window.pushButton_4.clicked.connect(config.restore_config)  # restore
     window.pushButton_6.clicked.connect(config.service_config_reload)  # config reload
-    app.setWindowIcon(QIcon('images/favicon.ico'))
     window.show()
+    app.setWindowIcon(QIcon('images/favicon.ico'))
     app.exec_()
+
+
+if __name__ == "__main__":
+    app = QtWidgets.QApplication([])
+    window = uic.loadUi("ssh.ui")
+    variable = get_variables()
+    config = ConfigHost(server=variable[0], port=variable[1],
+                        user=variable[2], password=variable[3])
+    try:
+        functional()
+    except Exception:
+        pass
