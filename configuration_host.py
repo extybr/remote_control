@@ -1,5 +1,6 @@
 import os
-from subprocess import run
+from platform import system
+from subprocess import run, getoutput
 from shutil import copy, move
 from dotenv import load_dotenv
 
@@ -17,13 +18,24 @@ class Host:
         self.private_file = f'private/{self.server}'
 
     @staticmethod
-    def connect(server_name: str, user: str, host: str, port: str) -> None:
-        cmd = f"ssh -i {server_name} {user}@{host}:{port}"
-        run(cmd, shell=True)
+    def ping_host(host: str, port: str = 0) -> str:
+        result = ''
+        system_os = system()
+        if system_os == 'Windows':
+            result += getoutput(f"ping -n 3 {host}")
+            return result
+        elif system_os == 'Linux':
+            result = getoutput(f"ping -c3 {host}")
+            if port:
+                nmap = 'nmap -Pn -p '
+                result += '\n\n' + getoutput(f'{nmap}{port} {host}')
+            return result
+        return 'unknown system'
 
 
 class ConfigHost:
-    def __init__(self, server: str, port: str, user: str, password: str) -> None:
+    def __init__(self, server: str, port: str, user: str,
+                 password: str) -> None:
         self.server = server
         self.port = port
         self.user = user
@@ -70,7 +82,8 @@ class ConfigHost:
             del change["#PermitRootLogin"]
         if password_authentication:
             if password_authentication == 'yes':
-                change["#PasswordAuthentication"] = "PasswordAuthentication yes\n"
+                change[
+                    "#PasswordAuthentication"] = "PasswordAuthentication yes\n"
         elif not password_authentication:
             del change["#PasswordAuthentication"]
         text: list = []

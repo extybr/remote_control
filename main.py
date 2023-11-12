@@ -21,7 +21,7 @@ def set_server_config() -> None:
             window.lineEdit_15.setText(host.private_file)  # private file
 
 
-def connect_to_server() -> any:
+def connect_to_server() -> paramiko.SSHClient:
     host = Host(window.comboBox.currentIndex())
     for number in range(1, len(host.length) + 1):
         if window.comboBox.currentIndex() == number:
@@ -39,7 +39,7 @@ def connect_to_server() -> any:
 def command_execute(command: str) -> None:
     command = command if command else 'netstat -ntuop'
     window.textBrowser.clear()
-    server = Host(window.comboBox.currentIndex()).host
+    server = window.lineEdit.displayText()
     try:
         client = connect_to_server()
         stdin, stdout, stderr = client.exec_command(command)
@@ -84,12 +84,15 @@ def set_keygen() -> None:
 def set_config() -> None:
     pubkey_authentication = permit_root_login = password_authentication = ''
     if window.checkBox.isChecked():
-        pubkey_authentication = 'yes' if window.radioButton_3.isChecked() else 'no'
+        pubkey_authentication = ('yes' if window.radioButton_3.isChecked()
+                                 else 'no')
     if window.checkBox_4.isChecked():
         permit_root_login = 'yes' if window.radioButton_2.isChecked() else 'no'
     if window.checkBox_2.isChecked():
-        password_authentication = 'yes' if window.radioButton_5.isChecked() else 'no'
-    authorized_keys_file_path = True if window.checkBox_3.isChecked() else False
+        password_authentication = ('yes' if window.radioButton_5.isChecked()
+                                   else 'no')
+    authorized_keys_file_path = (True if window.checkBox_3.isChecked()
+                                 else False)
     path = window.lineEdit_11.displayText()
     config.set_config_change(server=window.lineEdit_7.displayText(),
                              pubkey_authentication=pubkey_authentication,
@@ -110,12 +113,12 @@ def move_and_change() -> None:
                            server=server_name)
 
 
-def connect() -> None:
-    server_name = window.lineEdit_4.displayText()
-    user = window.lineEdit_3.displayText()
+def ping_host() -> None:
+    window.textBrowser.clear()
     host = window.lineEdit.displayText()
     port = window.lineEdit_2.displayText()
-    Host.connect(server_name=server_name, user=user, host=host, port=port)
+    output = Host.ping_host(host=host, port=port)
+    window.textBrowser.append(output.strip())
 
 
 def select_from_path() -> None:
@@ -136,15 +139,15 @@ def select_private_file_path() -> None:
     window.lineEdit_15.setText(file_path)
 
 
-def functional():
+def functional() -> None:
     global window, config, app
     window.comboBox.addItems(Host(1).length)
-    window.pushButton_8.clicked.connect(set_server_config)  # select
-    window.pushButton_7.clicked.connect(connect)
+    window.pushButton_8.clicked.connect(set_server_config)  # select (hide)
+    window.pushButton_7.clicked.connect(ping_host)  # connect
     window.pushButton.clicked.connect(execute)  # execute command
-    window.toolButton.clicked.connect(select_from_path)
-    window.toolButton_2.clicked.connect(select_to_path)
-    window.toolButton_3.clicked.connect(select_private_file_path)
+    window.toolButton.clicked.connect(select_from_path)  # from
+    window.toolButton_2.clicked.connect(select_to_path)  # to
+    window.toolButton_3.clicked.connect(select_private_file_path)  # private file
     window.pushButton_10.clicked.connect(generate_text_keygen)  # generate
     window.pushButton_2.clicked.connect(set_keygen)  # execute keygen
     window.pushButton_9.clicked.connect(config.save_backup)  # backup
@@ -163,7 +166,4 @@ if __name__ == "__main__":
     variable = get_variables()
     config = ConfigHost(server=variable[0], port=variable[1],
                         user=variable[2], password=variable[3])
-    try:
-        functional()
-    except Exception:
-        pass
+    functional()

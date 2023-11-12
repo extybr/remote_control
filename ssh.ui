@@ -76,7 +76,7 @@
               <string notr="true">background-color: rgb(166, 255, 139);</string>
              </property>
              <property name="text">
-              <string>connect</string>
+              <string>ping host</string>
              </property>
             </widget>
            </item>
