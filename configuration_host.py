@@ -22,7 +22,8 @@ class Host:
         result = ''
         system_os = system()
         if system_os == 'Windows':
-            result += getoutput(f"ping -n 3 {host}")
+            system_encoding = getoutput('chcp').split(' ')[-1]
+            result += getoutput(f"ping -n 3 {host}", encoding=system_encoding)
             return result
         elif system_os == 'Linux':
             result = getoutput(f"ping -c3 {host}")
@@ -60,32 +61,34 @@ class ConfigHost:
                           password_authentication: str = '',
                           authorized_keys_file_path: bool = True,
                           path: str = '') -> None:
-        change = {"#PermitRootLogin": "PermitRootLogin no\n",
+        config = {"#PermitRootLogin": "PermitRootLogin no\n",
                   "#PubkeyAuthentication": "PubkeyAuthentication yes\n",
                   "#AuthorizedKeysFile": (f"AuthorizedKeysFile .ssh/"
                                           f"{server}.pub\n"),
                   "#PasswordAuthentication": "PasswordAuthentication no\n"}
         if not authorized_keys_file_path:
-            del change["#AuthorizedKeysFile"]
+            del config["#AuthorizedKeysFile"]
         elif authorized_keys_file_path:
             if path != '.ssh/{server}.pub' and path.strip() != '':
-                change["#AuthorizedKeysFile"] = f"AuthorizedKeysFile {path}\n"
+                config["#AuthorizedKeysFile"] = f"AuthorizedKeysFile {path}\n"
         if pubkey_authentication:
             if pubkey_authentication == 'no':
-                change['#PubkeyAuthentication'] = "PubkeyAuthentication no\n"
+                config['#PubkeyAuthentication'] = "PubkeyAuthentication no\n"
         elif not pubkey_authentication:
-            del change['#PubkeyAuthentication']
+            del config['#PubkeyAuthentication']
         if permit_root_login:
             if permit_root_login == 'yes':
-                change["#PermitRootLogin"] = "PermitRootLogin yes\n"
+                config["#PermitRootLogin"] = "PermitRootLogin yes\n"
         elif not permit_root_login:
-            del change["#PermitRootLogin"]
+            del config["#PermitRootLogin"]
         if password_authentication:
             if password_authentication == 'yes':
-                change[
-                    "#PasswordAuthentication"] = "PasswordAuthentication yes\n"
+                config["#PasswordAuthentication"] = "PasswordAuthentication yes\n"
         elif not password_authentication:
-            del change["#PasswordAuthentication"]
+            del config["#PasswordAuthentication"]
+        ConfigHost.change_config(self, config)
+
+    def change_config(self, _config):
         text: list = []
         with open(self.sshd_config, 'r') as config:
             text = config.readlines()
@@ -93,50 +96,35 @@ class ConfigHost:
             text.reverse()
             while text:
                 string = text.pop()
-                for key in change:
+                for key in _config:
                     if string.startswith(key):
-                        string = change[key]
+                        string = _config[key]
                 config.writelines(string)
 
-    def sed_config_change(self, server: str) -> None:
-        """
-        Variant 2. GNU CoreUtils: sed
-        :param server: str
-        :return: None
-        """
-        change = {"#PermitRootLogin": "PermitRootLogin no\n",
-                  "#PubkeyAuthentication": "PubkeyAuthentication yes\n",
-                  "#AuthorizedKeysFile": (f"AuthorizedKeysFile .ssh/"
-                                          f"{server}.pub\n"),
-                  "#PasswordAuthentication": "PasswordAuthentication no\n"}
-        for key, value in change.items():
-            run(f"sed -i 'c/{key}/{value[:-2]}' {self.sshd_config}")
-
-    def move_and_change(self, from_ssh: str,
+    @staticmethod
+    def move_and_change(from_ssh: str,
                         to_ssh: str,
                         user: str,
                         server: str) -> None:
         # home_ssh = f'/home/{user}/.ssh'
-        if not from_ssh.endswith('/'):
-            from_ssh = from_ssh + '/'
-        exists_from_ssh = os.path.exists(from_ssh + server)
-        exists_etc_ssh = os.path.exists(self.etc_ssh + server)
-        from_path = from_ssh + server if exists_from_ssh else server
-        if exists_etc_ssh and not from_path:
-            from_path = self.etc_ssh + server
-        if to_ssh.startswith('/home/') and (exists_from_ssh or exists_etc_ssh):
+        if os.path.exists(from_ssh) and os.path.isfile(from_ssh):
             if not os.path.exists(to_ssh):
                 os.mkdir(to_ssh)
-            if os.path.exists(from_path) and os.path.exists(to_ssh):
-                move(from_path, to_ssh)
-                move(from_path + '.pub', to_ssh)
-                cmd = [f"cd {to_ssh}",
-                       f"chmod 600 {server}*",
-                       f"chown {user}:{user} {server}*",
-                       f"systemctl reload sshd"]
+            if os.path.exists(to_ssh) and os.path.isdir(to_ssh):
+                move(from_ssh, to_ssh)
+            if os.path.exists(from_ssh + '.pub') and os.path.isfile(from_ssh + '.pub'):
+                move(from_ssh + '.pub', to_ssh)
+            if os.path.exists(to_ssh + server) or os.path.exists(f'{to_ssh}/{server}'):
+                if not to_ssh.endswith('/'):
+                    to_ssh = to_ssh + '/'
+                cmd = [f"chmod 700 {to_ssh}",
+                       f"chmod 600 {to_ssh}{server}*"]
                 [run(i, shell=True) for i in cmd]
+                if user:
+                    cmd = f'chown {user}:{user} {to_ssh}{server}*'
+                    run(cmd, shell=True)
 
     @staticmethod
     def service_config_reload() -> None:
-        cmd = 'systemctl reload ssh'
+        cmd = 'sudo systemctl reload sshd'
         run(cmd, shell=True)

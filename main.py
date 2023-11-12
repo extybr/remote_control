@@ -94,12 +94,16 @@ def set_config() -> None:
     authorized_keys_file_path = (True if window.checkBox_3.isChecked()
                                  else False)
     path = window.lineEdit_11.displayText()
-    config.set_config_change(server=window.lineEdit_7.displayText(),
-                             pubkey_authentication=pubkey_authentication,
-                             permit_root_login=permit_root_login,
-                             password_authentication=password_authentication,
-                             authorized_keys_file_path=authorized_keys_file_path,
-                             path=path)
+    try:
+        config.set_config_change(server=window.lineEdit_7.displayText(),
+                                 pubkey_authentication=pubkey_authentication,
+                                 permit_root_login=permit_root_login,
+                                 password_authentication=password_authentication,
+                                 authorized_keys_file_path=authorized_keys_file_path,
+                                 path=path)
+        window.label_11.setText('success')
+    except PermissionError:
+        window.label_11.setText('forbidden! (!sudo)')
 
 
 def move_and_change() -> None:
