@@ -35,12 +35,9 @@ class Host:
 
 
 class ConfigHost:
-    def __init__(self, server: str, port: str, user: str,
-                 password: str) -> None:
+    def __init__(self, server: str, user: str) -> None:
         self.server = server
-        self.port = port
         self.user = user
-        self.password = password
         self.sshd_config = "/etc/ssh/sshd_config"
         self.etc_ssh = '/etc/ssh/'
 
@@ -56,16 +53,20 @@ class ConfigHost:
             run(text, shell=True)
 
     def set_config_change(self, server: str,
+                          port: str = '',
                           pubkey_authentication: str = '',
                           permit_root_login: str = '',
                           password_authentication: str = '',
                           authorized_keys_file_path: bool = True,
                           path: str = '') -> None:
-        config = {"#PermitRootLogin": "PermitRootLogin no\n",
+        config = {"#Port 22": f"Port {port.strip()}\n",
+                  "#PermitRootLogin": "PermitRootLogin no\n",
                   "#PubkeyAuthentication": "PubkeyAuthentication yes\n",
                   "#AuthorizedKeysFile": (f"AuthorizedKeysFile .ssh/"
                                           f"{server}.pub\n"),
                   "#PasswordAuthentication": "PasswordAuthentication no\n"}
+        if not port or not port.strip().isdigit():
+            del config["#Port 22"]
         if not authorized_keys_file_path:
             del config["#AuthorizedKeysFile"]
         elif authorized_keys_file_path:

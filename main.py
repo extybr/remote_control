@@ -47,6 +47,7 @@ def command_execute(command: str) -> None:
         window.textBrowser.clear()
         for line in output:
             window.textBrowser.append(line.strip())
+        window.textBrowser.scrollToAnchor("scroll")
     except TimeoutError as e:
         window.textBrowser.append(f'unable to connect to server: <h1>{server}'
                                   f'</h1> (<font color="red">{e})</font>')
@@ -62,10 +63,8 @@ def execute() -> None:
 
 def get_variables() -> tuple:
     server_name = window.lineEdit_7.displayText()
-    port = window.lineEdit_8.displayText()
     user = window.lineEdit_9.displayText()
-    password = window.lineEdit_10.displayText()
-    return server_name, port, user, password
+    return server_name, user
 
 
 def generate_text_keygen() -> str:
@@ -82,7 +81,10 @@ def set_keygen() -> None:
 
 
 def set_config() -> None:
-    pubkey_authentication = permit_root_login = password_authentication = ''
+    port = pubkey_authentication = ''
+    permit_root_login = password_authentication = ''
+    if window.checkBox_5.isChecked():
+        port = window.lineEdit_16.displayText()
     if window.checkBox.isChecked():
         pubkey_authentication = ('yes' if window.radioButton_3.isChecked()
                                  else 'no')
@@ -96,6 +98,7 @@ def set_config() -> None:
     path = window.lineEdit_11.displayText()
     try:
         config.set_config_change(server=window.lineEdit_7.displayText(),
+                                 port=port,
                                  pubkey_authentication=pubkey_authentication,
                                  permit_root_login=permit_root_login,
                                  password_authentication=password_authentication,
@@ -144,7 +147,6 @@ def select_private_file_path() -> None:
 
 
 def functional() -> None:
-    global window, config, app
     window.comboBox.addItems(Host(1).length)
     window.pushButton_8.clicked.connect(set_server_config)  # select (hide)
     window.pushButton_7.clicked.connect(ping_host)  # connect
@@ -168,6 +170,5 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication([])
     window = uic.loadUi("ssh.ui")
     variable = get_variables()
-    config = ConfigHost(server=variable[0], port=variable[1],
-                        user=variable[2], password=variable[3])
+    config = ConfigHost(server=variable[0], user=variable[1])
     functional()
