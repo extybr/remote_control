@@ -1,15 +1,19 @@
 import paramiko
 from pathlib import Path
 from PyQt5 import QtWidgets, uic
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QIntValidator
 from configuration_host import Host, ConfigHost
 
 
-def set_server_config() -> None:
+def clear_lineedit():
     window_line = [window.lineEdit, window.lineEdit_2, window.lineEdit_3,
                    window.lineEdit_4, window.lineEdit_5, window.lineEdit_15]
     for item in window_line:
         item.clear()
+
+
+def set_server_config() -> None:
+    clear_lineedit()
     host = Host(window.comboBox.currentIndex())
     for number in range(1, len(host.length) + 1):
         if window.comboBox.currentIndex() == number:
@@ -21,19 +25,34 @@ def set_server_config() -> None:
             window.lineEdit_15.setText(host.private_file)  # private file
 
 
+def get_host_variables():
+    return [window.lineEdit.displayText(), window.lineEdit_2.displayText(),
+            window.lineEdit_3.displayText(), window.lineEdit_4.displayText(),
+            window.lineEdit_5.displayText(), window.lineEdit_15.displayText()]
+
+
 def connect_to_server() -> paramiko.SSHClient:
     host = Host(window.comboBox.currentIndex())
-    for number in range(1, len(host.length) + 1):
+    _variables = get_host_variables()
+    path_file = Path(_variables[5]).absolute()
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    for number in range(len(host.length) + 1):
+        if not all(_variables[:3]):
+            window.textBrowser.clear()
+            window.textBrowser.append('<h4>missing required data</h4>')
         if window.comboBox.currentIndex() == number:
-            path_file = Path(window.lineEdit_15.displayText()).absolute()
-            client = paramiko.SSHClient()
-            client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            key = paramiko.RSAKey.from_private_key_file(
-                filename=str(path_file),
-                password=host.password)
-            client.connect(hostname=host.host, port=host.port,
-                           username=host.user, pkey=key, timeout=5)
-            return client
+            if path_file:
+                key = paramiko.RSAKey.from_private_key_file(
+                    filename=str(path_file),
+                    password=_variables[4])
+                client.connect(hostname=_variables[0], port=_variables[1],
+                               username=_variables[2], pkey=key, timeout=5)
+        if all(_variables[:3]) and not _variables[5] and _variables[4]:
+            client.connect(hostname=_variables[0], port=_variables[1],
+                           username=_variables[2], password=_variables[4],
+                           timeout=5)
+    return client
 
 
 def command_execute(command: str) -> None:
@@ -58,7 +77,7 @@ def execute() -> None:
     try:
         command_execute(command=command)
     except Exception as e:
-        print(e)
+        window.textBrowser.append(str(e))
 
 
 def get_variables() -> tuple:
@@ -148,6 +167,8 @@ def select_private_file_path() -> None:
 
 def functional() -> None:
     window.comboBox.addItems(Host(1).length)
+    window.lineEdit_2.setValidator(QIntValidator(1, 65535, window))
+    window.lineEdit_16.setValidator(QIntValidator(1, 65535, window))
     window.pushButton_8.clicked.connect(set_server_config)  # select (hide)
     window.pushButton_7.clicked.connect(ping_host)  # connect
     window.pushButton.clicked.connect(execute)  # execute command
