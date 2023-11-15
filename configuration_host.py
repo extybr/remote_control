@@ -33,6 +33,16 @@ class Host:
             return result
         return 'unknown system'
 
+    @staticmethod
+    def generate_text_scp(private_file: str, local_folder: str, user: str,
+                          host: str, remote_folder: str,
+                          reverse: bool) -> str:
+        _remote_folder = f'{user}@{host}:{remote_folder}'
+        if not reverse:
+            _remote_folder, local_folder = local_folder, _remote_folder
+        cmd = f'scp -i {private_file} {local_folder} {_remote_folder}'
+        return cmd
+
 
 class ConfigHost:
     def __init__(self, server: str, user: str) -> None:

@@ -1,11 +1,12 @@
 import paramiko
+from scp import SCPClient
 from pathlib import Path
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtGui import QIcon, QIntValidator
 from configuration_host import Host, ConfigHost
 
 
-def clear_lineedit():
+def clear_lineedit() -> None:
     window_line = [window.lineEdit, window.lineEdit_2, window.lineEdit_3,
                    window.lineEdit_4, window.lineEdit_5, window.lineEdit_15]
     for item in window_line:
@@ -25,7 +26,7 @@ def set_server_config() -> None:
             window.lineEdit_15.setText(host.private_file)  # private file
 
 
-def get_host_variables():
+def get_host_variables() -> list:
     return [window.lineEdit.displayText(), window.lineEdit_2.displayText(),
             window.lineEdit_3.displayText(), window.lineEdit_4.displayText(),
             window.lineEdit_5.displayText(), window.lineEdit_15.displayText()]
@@ -165,23 +166,72 @@ def select_private_file_path() -> None:
     window.lineEdit_15.setText(file_path)
 
 
+def select_from_folder_copy() -> None:
+    if window.checkBox_6.isChecked():
+        file_path = QtWidgets.QFileDialog.getOpenFileName(
+            window, 'Select a local file', '/home/')[0]
+        window.lineEdit_8.setText(file_path)
+    elif not window.checkBox_6.isChecked():
+        path = QtWidgets.QFileDialog.getExistingDirectory(
+            window, 'Select the local folder', '/home/')
+        window.lineEdit_8.setText(path)
+
+
+def generate_text_scp() -> None:
+    _variables = get_host_variables()
+    host = _variables[0]
+    user = _variables[2]
+    private_file = Path(_variables[5]).absolute()
+    local_folder = Path(window.lineEdit_8.displayText()).absolute()
+    remote_folder = window.lineEdit_10.displayText()
+    reverse = False
+    if window.checkBox_6.isChecked():
+        reverse = True
+    command = Host.generate_text_scp(host=host, user=user,
+                                     private_file=str(private_file),
+                                     local_folder=str(local_folder),
+                                     remote_folder=remote_folder,
+                                     reverse=reverse)
+    window.lineEdit_17.setText(command)
+
+
+def copy_scp() -> None:
+    local_folder = Path(window.lineEdit_8.displayText()).absolute()
+    remote_folder = window.lineEdit_10.displayText()
+    try:
+        client = connect_to_server()
+        with SCPClient(client.get_transport()) as scp:
+            if not window.checkBox_6.isChecked():
+                scp.get(remote_folder, str(local_folder))
+            elif window.checkBox_6.isChecked():
+                local_file = local_folder
+                scp.put(str(local_file), remote_folder, recursive=True)
+        window.label_17.setText('successfully! copied')
+    except Exception as e:
+        window.lineEdit_17.setText(str(e))
+        window.label_17.setText('error')
+
+
 def functional() -> None:
     window.comboBox.addItems(Host(1).length)
     window.lineEdit_2.setValidator(QIntValidator(1, 65535, window))
     window.lineEdit_16.setValidator(QIntValidator(1, 65535, window))
-    window.pushButton_8.clicked.connect(set_server_config)  # select (hide)
-    window.pushButton_7.clicked.connect(ping_host)  # connect
-    window.pushButton.clicked.connect(execute)  # execute command
-    window.toolButton.clicked.connect(select_from_path)  # from
-    window.toolButton_2.clicked.connect(select_to_path)  # to
+    window.toolButton.clicked.connect(select_from_path)  # from (move)
+    window.toolButton_2.clicked.connect(select_to_path)  # to (move)
     window.toolButton_3.clicked.connect(select_private_file_path)  # private file
-    window.pushButton_10.clicked.connect(generate_text_keygen)  # generate
+    window.toolButton_4.clicked.connect(select_from_folder_copy)  # from (copy)
+    window.pushButton.clicked.connect(execute)  # execute command
     window.pushButton_2.clicked.connect(set_keygen)  # execute keygen
-    window.pushButton_9.clicked.connect(config.save_backup)  # backup
     window.pushButton_3.clicked.connect(set_config)  # change sshd file
-    window.pushButton_5.clicked.connect(move_and_change)  # move
     window.pushButton_4.clicked.connect(config.restore_config)  # restore
+    window.pushButton_5.clicked.connect(move_and_change)  # move
     window.pushButton_6.clicked.connect(config.service_config_reload)  # config reload
+    window.pushButton_7.clicked.connect(ping_host)  # connect
+    window.pushButton_8.clicked.connect(set_server_config)  # select (hide)
+    window.pushButton_9.clicked.connect(config.save_backup)  # backup
+    window.pushButton_10.clicked.connect(generate_text_keygen)  # generate
+    window.pushButton_11.clicked.connect(generate_text_scp)  # generate (scp)
+    window.pushButton_12.clicked.connect(copy_scp)  # execute (scp)
     window.show()
     app.setWindowIcon(QIcon('images/favicon.ico'))
     app.exec_()
