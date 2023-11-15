@@ -170,13 +170,9 @@ def select_from_folder_copy() -> None:
     message = 'local destination folder'
     if window.checkBox_6.isChecked():
         message = 'local source folder'
-        path = QtWidgets.QFileDialog.getExistingDirectory(
-            window, message, '/home/')
-        window.lineEdit_8.setText(path)
-    elif not window.checkBox_6.isChecked():
-        path = QtWidgets.QFileDialog.getExistingDirectory(
-            window, message, '/home/')
-        window.lineEdit_8.setText(path)
+    path = QtWidgets.QFileDialog.getExistingDirectory(
+        window, message, '/home/')
+    window.lineEdit_8.setText(path)
 
 
 def generate_text_scp() -> None:
