@@ -167,13 +167,15 @@ def select_private_file_path() -> None:
 
 
 def select_from_folder_copy() -> None:
+    message = 'local destination folder'
     if window.checkBox_6.isChecked():
-        file_path = QtWidgets.QFileDialog.getOpenFileName(
-            window, 'Select a local file', '/home/')[0]
-        window.lineEdit_8.setText(file_path)
+        message = 'local source folder'
+        path = QtWidgets.QFileDialog.getExistingDirectory(
+            window, message, '/home/')
+        window.lineEdit_8.setText(path)
     elif not window.checkBox_6.isChecked():
         path = QtWidgets.QFileDialog.getExistingDirectory(
-            window, 'Select the local folder', '/home/')
+            window, message, '/home/')
         window.lineEdit_8.setText(path)
 
 
@@ -183,6 +185,8 @@ def generate_text_scp() -> None:
     user = _variables[2]
     private_file = Path(_variables[5]).absolute()
     local_folder = Path(window.lineEdit_8.displayText()).absolute()
+    window.lineEdit_10.setText(
+        window.lineEdit_10.displayText().replace('{user}', user))
     remote_folder = window.lineEdit_10.displayText()
     reverse = False
     if window.checkBox_6.isChecked():
@@ -202,7 +206,7 @@ def copy_scp() -> None:
         client = connect_to_server()
         with SCPClient(client.get_transport()) as scp:
             if not window.checkBox_6.isChecked():
-                scp.get(remote_folder, str(local_folder))
+                scp.get(remote_folder, str(local_folder), recursive=True)
             elif window.checkBox_6.isChecked():
                 local_file = local_folder
                 scp.put(str(local_file), remote_folder, recursive=True)

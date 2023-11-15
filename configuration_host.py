@@ -40,7 +40,7 @@ class Host:
         _remote_folder = f'{user}@{host}:{remote_folder}'
         if not reverse:
             _remote_folder, local_folder = local_folder, _remote_folder
-        cmd = f'scp -i {private_file} {local_folder} {_remote_folder}'
+        cmd = f'scp -i {private_file} -r {local_folder} {_remote_folder}'
         return cmd
 
 
