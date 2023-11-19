@@ -99,7 +99,7 @@ class ConfigHost:
             del config["#PasswordAuthentication"]
         ConfigHost.change_config(self, config)
 
-    def change_config(self, _config):
+    def change_config(self, _config: dict) -> None:
         text: list = []
         with open(self.sshd_config, 'r') as config:
             text = config.readlines()
@@ -117,15 +117,16 @@ class ConfigHost:
                         to_ssh: str,
                         user: str,
                         server: str) -> None:
-        # home_ssh = f'/home/{user}/.ssh'
         if os.path.exists(from_ssh) and os.path.isfile(from_ssh):
             if not os.path.exists(to_ssh):
                 os.mkdir(to_ssh)
             if os.path.exists(to_ssh) and os.path.isdir(to_ssh):
                 move(from_ssh, to_ssh)
-            if os.path.exists(from_ssh + '.pub') and os.path.isfile(from_ssh + '.pub'):
+            if os.path.exists(from_ssh + '.pub') and os.path.isfile(from_ssh
+                                                                    + '.pub'):
                 move(from_ssh + '.pub', to_ssh)
-            if os.path.exists(to_ssh + server) or os.path.exists(f'{to_ssh}/{server}'):
+            if os.path.exists(to_ssh + server) or os.path.exists(f'{to_ssh}/'
+                                                                 f'{server}'):
                 if not to_ssh.endswith('/'):
                     to_ssh = to_ssh + '/'
                 cmd = [f"chmod 700 {to_ssh}",

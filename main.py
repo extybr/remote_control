@@ -1,13 +1,14 @@
-import paramiko
-from threading import Thread
+from paramiko import SSHClient, AutoAddPolicy, RSAKey
 from scp import SCPClient
 from pathlib import Path
+from threading import Thread
+from typing import Callable, List, Tuple
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtGui import QIcon, QIntValidator
 from configuration_host import Host, ConfigHost
 
 
-def thread(function):
+def thread(function: Callable) -> Callable:
     def run():
         Thread(target=function).start()
     return run
@@ -33,16 +34,16 @@ def set_server_config() -> None:
             window.lineEdit_15.setText(host.private_file)  # private file
 
 
-def get_host_variables() -> list:
+def get_host_variables() -> List[str | int]:
     return [window.lineEdit.displayText(), window.lineEdit_2.displayText(),
             window.lineEdit_3.displayText(), window.lineEdit_4.displayText(),
             window.lineEdit_5.displayText(), window.lineEdit_15.displayText()]
 
 
-def singleton(function):
+def singleton(function: Callable) -> Callable:
     instances = {}
 
-    def get_instances(*args, **kwargs):
+    def get_instances(*args, **kwargs) -> dict:
         if f'{function}-{args[0]}' not in instances:
             instances[f'{function}-{args[0]}'] = function(*args, **kwargs)
         return instances[f'{function}-{args[0]}']
@@ -51,19 +52,19 @@ def singleton(function):
 
 
 @singleton
-def connect_to_server(server) -> paramiko.SSHClient:
+def connect_to_server(server: str) -> SSHClient:
     host = Host(window.comboBox.currentIndex())
     _variables = get_host_variables()
     path_file = Path(_variables[5]).absolute()
-    client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    client = SSHClient()
+    client.set_missing_host_key_policy(AutoAddPolicy())
     for number in range(len(host.length) + 1):
         if not all(_variables[:3]):
             window.textBrowser.clear()
             window.textBrowser.append('<h4>missing required data</h4>')
         if window.comboBox.currentIndex() == number:
             if path_file:
-                key = paramiko.RSAKey.from_private_key_file(
+                key = RSAKey.from_private_key_file(
                     filename=str(path_file),
                     password=_variables[4])
                 client.connect(hostname=_variables[0], port=_variables[1],
@@ -89,7 +90,7 @@ def command_execute(command: str) -> None:
         window.textBrowser.scrollToAnchor("scroll")
     except TimeoutError as e:
         window.textBrowser.append(f'unable to connect to server: <h1>{server}'
-                                  f'</h1> (<font color="red">{e})</font>')
+                                  f'</h1> (<font color="red">{e}</font>)')
 
 
 def execute() -> None:
@@ -100,7 +101,7 @@ def execute() -> None:
         window.textBrowser.append(str(e))
 
 
-def get_variables() -> tuple:
+def get_variables() -> Tuple[str, str]:
     server_name = window.lineEdit_7.displayText()
     user = window.lineEdit_9.displayText()
     return server_name, user
