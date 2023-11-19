@@ -1,5 +1,5 @@
 import paramiko
-import threading
+from threading import Thread
 from scp import SCPClient
 from pathlib import Path
 from PyQt5 import QtWidgets, uic
@@ -9,7 +9,7 @@ from configuration_host import Host, ConfigHost
 
 def thread(function):
     def run():
-        threading.Thread(target=function).start()
+        Thread(target=function).start()
     return run
 
 
@@ -43,9 +43,9 @@ def singleton(function):
     instances = {}
 
     def get_instances(*args, **kwargs):
-        if str(function) + str(args) not in instances:
-            instances[str(function) + str(args)] = function(*args, **kwargs)
-        return instances[str(function) + str(args)]
+        if f'{function}-{args[0]}' not in instances:
+            instances[f'{function}-{args[0]}'] = function(*args, **kwargs)
+        return instances[f'{function}-{args[0]}']
 
     return get_instances
 
