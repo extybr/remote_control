@@ -1,9 +1,16 @@
 import paramiko
+import threading
 from scp import SCPClient
 from pathlib import Path
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtGui import QIcon, QIntValidator
 from configuration_host import Host, ConfigHost
+
+
+def thread(function):
+    def run():
+        threading.Thread(target=function).start()
+    return run
 
 
 def clear_lineedit() -> None:
@@ -32,6 +39,18 @@ def get_host_variables() -> list:
             window.lineEdit_5.displayText(), window.lineEdit_15.displayText()]
 
 
+def singleton(function):
+    instances = {}
+
+    def get_instances(*args, **kwargs):
+        if function not in instances:
+            instances[function] = function(*args, **kwargs)
+        return instances[function]
+
+    return get_instances
+
+
+@singleton
 def connect_to_server() -> paramiko.SSHClient:
     host = Host(window.comboBox.currentIndex())
     _variables = get_host_variables()
@@ -142,6 +161,11 @@ def move_and_change() -> None:
 
 def ping_host() -> None:
     window.textBrowser.clear()
+    thread_ping_hosts()
+
+
+@thread
+def thread_ping_hosts() -> None:
     host = window.lineEdit.displayText()
     port = window.lineEdit_2.displayText()
     output = Host.ping_host(host=host, port=port)
@@ -218,14 +242,16 @@ def functional() -> None:
     window.lineEdit_16.setValidator(QIntValidator(1, 65535, window))
     window.toolButton.clicked.connect(select_from_path)  # from (move)
     window.toolButton_2.clicked.connect(select_to_path)  # to (move)
-    window.toolButton_3.clicked.connect(select_private_file_path)  # private file
+    window.toolButton_3.clicked.connect(
+        select_private_file_path)  # private file
     window.toolButton_4.clicked.connect(select_from_folder_copy)  # from (copy)
     window.pushButton.clicked.connect(execute)  # execute command
     window.pushButton_2.clicked.connect(set_keygen)  # execute keygen
     window.pushButton_3.clicked.connect(set_config)  # change sshd file
     window.pushButton_4.clicked.connect(config.restore_config)  # restore
     window.pushButton_5.clicked.connect(move_and_change)  # move
-    window.pushButton_6.clicked.connect(config.service_config_reload)  # config reload
+    window.pushButton_6.clicked.connect(
+        config.service_config_reload)  # config reload
     window.pushButton_7.clicked.connect(ping_host)  # connect
     window.pushButton_8.clicked.connect(set_server_config)  # select (hide)
     window.pushButton_9.clicked.connect(config.save_backup)  # backup
