@@ -43,15 +43,15 @@ def singleton(function):
     instances = {}
 
     def get_instances(*args, **kwargs):
-        if function not in instances:
-            instances[function] = function(*args, **kwargs)
-        return instances[function]
+        if str(function) + str(args) not in instances:
+            instances[str(function) + str(args)] = function(*args, **kwargs)
+        return instances[str(function) + str(args)]
 
     return get_instances
 
 
 @singleton
-def connect_to_server() -> paramiko.SSHClient:
+def connect_to_server(server) -> paramiko.SSHClient:
     host = Host(window.comboBox.currentIndex())
     _variables = get_host_variables()
     path_file = Path(_variables[5]).absolute()
@@ -80,7 +80,7 @@ def command_execute(command: str) -> None:
     window.textBrowser.clear()
     server = window.lineEdit.displayText()
     try:
-        client = connect_to_server()
+        client = connect_to_server(server)
         stdin, stdout, stderr = client.exec_command(command)
         output = stdout.readlines()
         window.textBrowser.clear()
