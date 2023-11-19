@@ -223,8 +223,9 @@ def generate_text_scp() -> None:
 def copy_scp() -> None:
     local_folder = Path(window.lineEdit_8.displayText()).absolute()
     remote_folder = window.lineEdit_10.displayText()
+    server = window.lineEdit.displayText()
     try:
-        client = connect_to_server()
+        client = connect_to_server(server)
         with SCPClient(client.get_transport()) as scp:
             if not window.checkBox_6.isChecked():
                 scp.get(remote_folder, str(local_folder), recursive=True)
