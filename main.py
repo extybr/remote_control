@@ -161,11 +161,19 @@ def move_and_change() -> None:
 
 
 def ping_host() -> None:
+    from configuration_host import system
+
     window.textBrowser.clear()
-    thread_ping_hosts()
+    system_os = system()
+    thr = thread(thread_ping_hosts)
+    os = {
+        "Windows": thr,
+        "Linux": thread_ping_hosts
+    }
+    os[system_os]()
 
 
-@thread
+# @thread
 def thread_ping_hosts() -> None:
     host = window.lineEdit.displayText()
     port = window.lineEdit_2.displayText()
